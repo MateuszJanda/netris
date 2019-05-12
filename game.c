@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Netris -- A free networked version of T*tris
  * Copyright (C) 1994,1995,1996  Mark H. Weaver <mhw@netris.org>
  * 
@@ -496,16 +496,16 @@ ExtFunc int main(int argc, char **argv)
 				protocolVersion = ntoh4(data[1]);
 				if (event.u.net.type != NP_version || major < MAJOR_VERSION)
 					fatal("Your opponent is using an old, incompatible version\n"
-					      "of Netris.  They should get the latest version.");
+						"of Netris.  They should get the latest version.");
 				if (major > MAJOR_VERSION)
 					fatal("Your opponent is using an newer, incompatible version\n"
-					      "of Netris.  Get the latest version.");
+						"of Netris.  Get the latest version.");
 				if (protocolVersion > PROTOCOL_VERSION)
 					protocolVersion = PROTOCOL_VERSION;
 			}
 			if (protocolVersion < 3 && stepDownInterval != DEFAULT_INTERVAL)
 				fatal("Your opponent's version of Netris predates the -i option.\n"
-				      "For fairness, you shouldn't use the -i option either.");
+					"For fairness, you shouldn't use the -i option either.");
 			{
 				netint4 data[3];
 				int len;
@@ -526,7 +526,7 @@ ExtFunc int main(int argc, char **argv)
 				data[2] = hton4(stepDownInterval);
 				SendPacket(NP_startConn, len, data);
 				if (WaitMyEvent(&event, EM_net) != E_net ||
-				    event.u.net.type != NP_startConn)
+					event.u.net.type != NP_startConn)
 					fatal("Network negotiation failed");
 				memcpy(data, event.u.net.data, len);
 				opponentFlags = ntoh4(data[0]);
@@ -534,13 +534,13 @@ ExtFunc int main(int argc, char **argv)
 				if (initConn) {
 					if ((opponentFlags & SCF_setSeed) != (myFlags & SCF_setSeed))
 						fatal("If one player sets the random number seed, "
-						      "both must.");
+							"both must.");
 					if ((myFlags & SCF_setSeed) && seed != initSeed)
 						fatal("Both players have set the random number seed, "
-						      "and they are unequal.");
+							"and they are unequal.");
 					if (protocolVersion >= 3 && stepDownInterval != ntoh4(data[2]))
 						fatal("Your opponent is using a different step-down "
-						      "interval (-i).\nYou must both use the same one.");
+							"interval (-i).\nYou must both use the same one.");
 					SRandom(seed);
 				}
 			}
@@ -558,7 +558,7 @@ ExtFunc int main(int argc, char **argv)
 					len = sizeof(opponentName);
 				SendPacket(NP_userName, len, userName);
 				if (WaitMyEvent(&event, EM_net) != E_net ||
-				    event.u.net.type != NP_userName)
+					event.u.net.type != NP_userName)
 					fatal("Network negotiation failed");
 				strncpy(opponentName, event.u.net.data,
 					sizeof(opponentName)-1);
