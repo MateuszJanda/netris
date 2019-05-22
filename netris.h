@@ -166,6 +166,7 @@ EXT Shape *curShape[MAX_SCREENS];
 EXT int curY[MAX_SCREENS], curX[MAX_SCREENS];
 EXT char opponentName[16], opponentHost[256];
 EXT int standoutEnable, colorEnable;
+EXT int debugMode;
 EXT int robotEnable, robotVersion, fairRobot;
 EXT int protocolVersion;
 

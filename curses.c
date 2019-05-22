@@ -75,7 +75,12 @@ ExtFunc void InitScreens(void)
 	 * Ctrl-C during initialization might leave the terminal in a bad state.
 	 */
 	BlockSignals(&oldMask, SIGINT, 0);
-	initscr();
+	if (!debugMode) {
+		initscr();
+	}
+	else {
+		fprintf(stderr, "[+] Debug mode enabled.");
+	}
 
 #ifdef CURSES_HACK
 	{

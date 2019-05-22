@@ -399,10 +399,14 @@ ExtFunc int main(int argc, char **argv)
 	MyEvent event;
 
 	standoutEnable = colorEnable = 1;
+	debugMode = 0;
 	stepDownInterval = DEFAULT_INTERVAL;
 	MapKeys(DEFAULT_KEYS);
-	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:")) != -1)
+	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:d")) != -1)
 		switch (ch) {
+			case 'd':
+				debugMode = 1;
+				break;
 			case 'c':
 				initConn = 1;
 				hostStr = optarg;
