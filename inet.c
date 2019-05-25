@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Netris -- A free networked version of T*tris
  * Copyright (C) 1994,1995,1996  Mark H. Weaver <mhw@netris.org>
  * 
@@ -164,6 +164,7 @@ static MyEventType NetGenFunc(EventGenRec *gen, MyEvent *event)
 	event->u.net.type = type;
 	event->u.net.size = size - HEADER_SIZE;
 	event->u.net.data = netBuf + HEADER_SIZE;
+
 	if (type == NP_endConn) {
 		gotEndConn = 1;
 		return E_lostConn;
@@ -181,6 +182,12 @@ ExtFunc void CheckNetConn(void)
 
 ExtFunc void SendPacket(NetPacketType type, int size, void *data)
 {
+	MyEvent event;
+	event.type = E_net;
+	event.u.net.type = type;
+
+	StrEvent(&event);
+
 	netint2 header[2];
 
 	header[0] = hton2(type);
@@ -189,6 +196,72 @@ ExtFunc void SendPacket(NetPacketType type, int size, void *data)
 		die("write");
 	if (size > 0 && data && MyWrite(sock, data, size) != size)
 		die("write");
+}
+
+ExtFunc void StrEvent(MyEvent *event)
+{
+	if (event->type == E_net)
+		fprintf(stderr, "[<] %s %s\n", StrMyEventType(event), StrNetPacketType(event));
+}
+
+ExtFunc char *StrMyEventType(MyEvent *event)
+{
+	switch (event->type) {
+	case E_none:
+		return "E_none";
+	case E_alarm:
+		return "E_alarm";
+	case E_key:
+		return "E_key";
+	case E_net:
+		return "E_net";
+	case E_lostConn:
+		return "E_lostConn";
+	case E_robot:
+		return "E_robot";
+	case E_lostRobot:
+		return "E_robot";
+	}
+
+	return "Unknown MyEventType";
+}
+
+ExtFunc char *StrNetPacketType(MyEvent *event)
+{
+	switch (event->u.net.type) {
+	case NP_endConn:
+		return "NP_endConn";
+	case NP_giveJunk:
+		return "NP_giveJunk";
+	case NP_newPiece:
+		return "NP_newPiece";
+	case NP_down:
+		return "NP_down";
+	case NP_left:
+		return "NP_left";
+	case NP_right:
+		return "NP_right";
+	case NP_rotate:
+		return "NP_rotate";
+	case NP_drop:
+		return "NP_drop";
+	case NP_clear:
+		return "NP_clear";
+	case NP_insertJunk:
+		return "NP_insertJunk";
+	case NP_startConn:
+		return "NP_startConn";
+	case NP_userName:
+		return "NP_userName";
+	case NP_pause:
+		return "NP_pause";
+	case NP_version:
+		return "NP_version";
+	case NP_byeBye:
+		return "NP_byeBye";
+	}
+
+	return "Unknown NetPacketType";
 }
 
 ExtFunc void CloseNet(void)

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Netris -- A free networked version of T*tris
  * Copyright (C) 1994,1995,1996  Mark H. Weaver <mhw@netris.org>
  * 
