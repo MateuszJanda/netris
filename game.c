@@ -473,7 +473,16 @@ ExtFunc int main(int argc, char **argv)
 		if (!initSeed)
 			SRandom(time(0));
 		if (initConn || waitConn) {
-			game = GT_classicTwo;
+
+			if (debugMode) {
+				game = GT_onePlayer;
+				fprintf (stderr, "[+] Game: one player\n");
+			}
+			else {
+				game = GT_classicTwo;
+				fprintf (stderr, "[+] Game: two player\n");
+			}
+
 			if(gameState != STATE_STARTING) {
 				gameState = STATE_WAIT_CONNECTION;
 				ShowDisplayInfo();
@@ -574,7 +583,11 @@ ExtFunc int main(int argc, char **argv)
 					if (!isprint(opponentHost[i]))
 						opponentHost[i] = '?';
 			}
-			OneGame(0, 1);
+
+			if (debugMode)
+				OneGame(0, -1);
+			else
+				OneGame(0, 1);
 		}
 		else {
 			game = GT_onePlayer;

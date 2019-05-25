@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Netris -- A free networked version of T*tris
  * Copyright (C) 1994-1996,1999  Mark H. Weaver <mhw@netris.org>
  * 
@@ -79,7 +79,7 @@ ExtFunc void InitScreens(void)
 		initscr();
 	}
 	else {
-		fprintf(stderr, "[+] Debug mode enabled.");
+		fprintf(stderr, "[+] Debug mode enabled.\n");
 	}
 
 #ifdef CURSES_HACK
