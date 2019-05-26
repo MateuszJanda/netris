@@ -155,6 +155,8 @@ ExtFunc void OneGame(int scr, int scr2)
 			CheckNetConn();
 			switch (WaitMyEvent(&event, EM_any)) {
 				case E_alarm:
+					if (singlePlayer)
+						break;
 					if (!MovePiece(scr, -1, 0))
 						goto nextPiece;
 					else if (spied)
@@ -172,6 +174,8 @@ ExtFunc void OneGame(int scr, int scr2)
 					if (!p)
 						break;
 				keyEvent:
+					if (singlePlayer)
+						break;
 					if (paused && (key != KT_pause) && (key != KT_redraw))
 						break;
 					switch(key) {
@@ -277,6 +281,9 @@ ExtFunc void OneGame(int scr, int scr2)
 					switch(event.u.net.type) {
 						case NP_giveJunk:
 						{
+							if (singlePlayer)
+								break;
+
 							netint2 data[2];
 							short column;
 
@@ -398,7 +405,6 @@ ExtFunc int main(int argc, char **argv)
 	char *hostStr = NULL, *portStr = NULL;
 	MyEvent event;
 
-	debugMode = 0;
 	traceToFile = 0;
 	traceFile = NULL;
 	singlePlayer = 0;
@@ -406,11 +412,8 @@ ExtFunc int main(int argc, char **argv)
 	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
 	MapKeys(DEFAULT_KEYS);
-	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:dtu")) != -1)
+	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:tu")) != -1)
 		switch (ch) {
-			case 'd':
-				debugMode = 1;
-				break;
 			case 't':
 				traceToFile = 1;
 				break;
@@ -486,11 +489,11 @@ ExtFunc int main(int argc, char **argv)
 
 			if (singlePlayer) {
 				game = GT_onePlayer;
-				DebugPrint("[+] Game: single player\n");
+				TracePrint("[+] Game: single player\n");
 			}
 			else {
 				game = GT_classicTwo;
-				DebugPrint("[+] Game: two player\n");
+				TracePrint("[+] Game: two player\n");
 			}
 
 			if(gameState != STATE_STARTING) {
@@ -594,10 +597,7 @@ ExtFunc int main(int argc, char **argv)
 						opponentHost[i] = '?';
 			}
 
-			if (singlePlayer)
-				OneGame(0, 1);
-			else
-				OneGame(0, 1);
+			OneGame(0, 1);
 		}
 		else {
 			game = GT_onePlayer;

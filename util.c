@@ -50,7 +50,7 @@ ExtFunc void InitUtil(void)
 	ResetBaseTime();
 
 	if (traceToFile) {
-		traceFile = fopen("trace", "w");
+		traceFile = fopen("/dev/pts/0", "w");
 		if (!traceFile) {
 			perror("fopen trace");
 			exit(1);
@@ -98,8 +98,7 @@ ExtFunc void Usage(void)
 	  "  -H		Show distribution and warranty information\n"
 	  "  -R		Show rules\n"
 	  "\n"
-	  "  -d   Enable debug mode\n"
-	  "  -t   Enable tracing (to file \"trace\" in current directory)\n"
+	  "  -t   Enable tracing\n"
 	  "  -u   Force single player mode\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
@@ -397,15 +396,15 @@ ExtFunc MyEventType WaitMyEvent(MyEvent *event, int mask)
 	}
 }
 
-ExtFunc void DebugPrint(char *fmt, ...)
+ExtFunc void TracePrint(char *fmt, ...)
 {
-	if (!debugMode)
+	if (!traceFile)
 		return;
 
 	va_list args;
 
 	va_start(args, fmt);
-	vfprintf(stderr, fmt, args);
+	vfprintf(traceFile, fmt, args);
 	va_end(args);
 }
 

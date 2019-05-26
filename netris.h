@@ -169,7 +169,6 @@ EXT int standoutEnable, colorEnable;
 EXT int robotEnable, robotVersion, fairRobot;
 EXT int protocolVersion;
 
-EXT int debugMode;
 EXT int traceToFile;
 EXT FILE *traceFile;
 EXT int singlePlayer;
