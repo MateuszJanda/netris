@@ -165,6 +165,8 @@ static MyEventType NetGenFunc(EventGenRec *gen, MyEvent *event)
 	event->u.net.size = size - HEADER_SIZE;
 	event->u.net.data = netBuf + HEADER_SIZE;
 
+	TraceEvent(event);
+
 	if (type == NP_endConn) {
 		gotEndConn = 1;
 		return E_lostConn;
@@ -186,7 +188,7 @@ ExtFunc void SendPacket(NetPacketType type, int size, void *data)
 	event.type = E_net;
 	event.u.net.type = type;
 
-	StrEvent(&event);
+	TraceEvent(&event);
 
 	netint2 header[2];
 
@@ -198,10 +200,20 @@ ExtFunc void SendPacket(NetPacketType type, int size, void *data)
 		die("write");
 }
 
-ExtFunc void StrEvent(MyEvent *event)
+ExtFunc void TraceEvent(MyEvent *event)
 {
-	if (event->type == E_net)
-		fprintf(stderr, "[<] %s %s\n", StrMyEventType(event), StrNetPacketType(event));
+	if (event->type == E_net) {
+		DebugPrint("[<] %s %s\n", StrMyEventType(event), StrNetPacketType(event));
+		if (traceFile)
+			fprintf(traceFile, "[<] %s %s\n", StrMyEventType(event), StrNetPacketType(event));
+	}
+	else {
+		DebugPrint("[!] %s\n", StrMyEventType(event));
+		if (traceFile)
+			fprintf(traceFile, "[!] %s\n", StrMyEventType(event));
+	}
+
+	fflush(stderr);
 }
 
 ExtFunc char *StrMyEventType(MyEvent *event)
@@ -286,6 +298,11 @@ ExtFunc void CloseNet(void)
 	}
 	if (netGen.next)
 		RemoveEventGen(&netGen);
+
+	if (traceFile) {
+		fclose(traceFile);
+		traceFile = NULL;
+	}
 }
 
 /*

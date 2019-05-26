@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Netris -- A free networked version of T*tris
  * Copyright (C) 1994-1996,1999  Mark H. Weaver <mhw@netris.org>
  * 
@@ -166,9 +166,13 @@ EXT Shape *curShape[MAX_SCREENS];
 EXT int curY[MAX_SCREENS], curX[MAX_SCREENS];
 EXT char opponentName[16], opponentHost[256];
 EXT int standoutEnable, colorEnable;
-EXT int debugMode;
 EXT int robotEnable, robotVersion, fairRobot;
 EXT int protocolVersion;
+
+EXT int debugMode;
+EXT int traceToFile;
+EXT FILE *traceFile;
+EXT int singlePlayer;
 
 EXT long initSeed;
 EXT long stepDownInterval, speed;

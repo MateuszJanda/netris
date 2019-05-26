@@ -398,14 +398,24 @@ ExtFunc int main(int argc, char **argv)
 	char *hostStr = NULL, *portStr = NULL;
 	MyEvent event;
 
-	standoutEnable = colorEnable = 1;
 	debugMode = 0;
+	traceToFile = 0;
+	traceFile = NULL;
+	singlePlayer = 0;
+
+	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
 	MapKeys(DEFAULT_KEYS);
-	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:d")) != -1)
+	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:dtu")) != -1)
 		switch (ch) {
 			case 'd':
 				debugMode = 1;
+				break;
+			case 't':
+				traceToFile = 1;
+				break;
+			case 'u':
+				singlePlayer = 1;
 				break;
 			case 'c':
 				initConn = 1;
@@ -474,13 +484,13 @@ ExtFunc int main(int argc, char **argv)
 			SRandom(time(0));
 		if (initConn || waitConn) {
 
-			if (debugMode) {
+			if (singlePlayer) {
 				game = GT_onePlayer;
-				fprintf (stderr, "[+] Game: one player\n");
+				DebugPrint("[+] Game: single player\n");
 			}
 			else {
 				game = GT_classicTwo;
-				fprintf (stderr, "[+] Game: two player\n");
+				DebugPrint("[+] Game: two player\n");
 			}
 
 			if(gameState != STATE_STARTING) {
@@ -584,8 +594,8 @@ ExtFunc int main(int argc, char **argv)
 						opponentHost[i] = '?';
 			}
 
-			if (debugMode)
-				OneGame(0, -1);
+			if (singlePlayer)
+				OneGame(0, 1);
 			else
 				OneGame(0, 1);
 		}

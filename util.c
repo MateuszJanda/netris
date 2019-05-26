@@ -48,6 +48,14 @@ ExtFunc void InitUtil(void)
 		SRandom(time(0));
 	signal(SIGINT, CatchInt);
 	ResetBaseTime();
+
+	if (traceToFile) {
+		traceFile = fopen("trace", "w");
+		if (!traceFile) {
+			perror("fopen trace");
+			exit(1);
+		}
+	}
 }
 
 ExtFunc void ResetBaseTime(void)
@@ -88,7 +96,11 @@ ExtFunc void Usage(void)
 	  "  -S		Disable inverse/bold/color for slow terminals\n"
 	  "  -C		Disable color\n"
 	  "  -H		Show distribution and warranty information\n"
-	  "  -R		Show rules\n",
+	  "  -R		Show rules\n"
+	  "\n"
+	  "  -d   Enable debug mode\n"
+	  "  -t   Enable tracing (to file \"trace\" in current directory)\n"
+	  "  -u   Force single player mode\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
 
@@ -383,6 +395,18 @@ ExtFunc MyEventType WaitMyEvent(MyEvent *event, int mask)
 		} while (gen != nextGen);
 		retry = 1;
 	}
+}
+
+ExtFunc void DebugPrint(char *fmt, ...)
+{
+	if (!debugMode)
+		return;
+
+	va_list args;
+
+	va_start(args, fmt);
+	vfprintf(stderr, fmt, args);
+	va_end(args);
 }
 
 /*
