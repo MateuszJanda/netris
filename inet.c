@@ -37,6 +37,7 @@ static int sock = -1;
 static EventGenRec netGen = { NULL, 0, FT_read, -1, NetGenFunc, EM_net };
 
 static char netBuf[64];
+static char traceBuf[256];
 static int netBufSize, netBufGoal = HEADER_SIZE;
 static int isServer, lostConn, gotEndConn;
 
@@ -165,8 +166,6 @@ static MyEventType NetGenFunc(EventGenRec *gen, MyEvent *event)
 	event->u.net.size = size - HEADER_SIZE;
 	event->u.net.data = netBuf + HEADER_SIZE;
 
-	TraceNetPacket(1, event);
-
 	if (type == NP_endConn) {
 		gotEndConn = 1;
 		return E_lostConn;
@@ -175,6 +174,8 @@ static MyEventType NetGenFunc(EventGenRec *gen, MyEvent *event)
 		lostConn = 1;
 		return E_lostConn;
 	}
+
+	TraceNetPacket(1, event);
 	return E_net;
 }
 
@@ -237,9 +238,22 @@ ExtFunc char *StrNetPacketType(MyEvent *event)
 	case NP_endConn:
 		return "NP_endConn";
 	case NP_giveJunk:
-		return "NP_giveJunk";
+	{
+		netint2 data[1];
+
+		memcpy(data, event->u.net.data, sizeof(data));
+		sprintf(traceBuf, "NP_giveJunk count=%d", ntoh2(data[0]));
+		return traceBuf;
+	}
 	case NP_newPiece:
-		return "NP_newPiece";
+	{
+		netint2 data[1];
+		memcpy(data, event->u.net.data, sizeof(data));
+		short shapeNum = ntoh2(data[0]);
+
+		sprintf(traceBuf, "NP_newPiece shape=%d", shapeNum);
+		return traceBuf;
+	}
 	case NP_down:
 		return "NP_down";
 	case NP_left:
@@ -253,7 +267,13 @@ ExtFunc char *StrNetPacketType(MyEvent *event)
 	case NP_clear:
 		return "NP_clear";
 	case NP_insertJunk:
+	{
+		netint2 data[2];
+		memcpy(data, event->u.net.data, sizeof(data));
+		sprintf(traceBuf, "NP_insertJunk count=%d, column=%d", ntoh2(data[0]), ntoh2(data[1]));
+
 		return "NP_insertJunk";
+	}
 	case NP_startConn:
 		return "NP_startConn";
 	case NP_userName:
