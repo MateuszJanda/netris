@@ -263,7 +263,7 @@ ExtFunc void BoardDump(int scr, int size, netint2 data[])
 		for (int x = 0; x < boardWidth[scr]; x++)
 			if (board[scr][y][x] != BT_none) {
 				if (x < sizeof(netint2) * BITS_IN_BYTE) {
-					row |= (1 << (sizeof(short) - x - 1));
+					row |= (1 << (sizeof(netint2) * BITS_IN_BYTE - x - 1));
 				} else {
 					TracePrint("[!] not enough space to serialize row\n");
 					die("not enough space to serialize row");
