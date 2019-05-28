@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Netris -- A free networked version of T*tris
  * Copyright (C) 1994-1996,1999  Mark H. Weaver <mhw@netris.org>
  * 
@@ -265,14 +265,14 @@ ExtFunc void BoardDump(int scr, int size, netint2 data[])
 				if (x < sizeof(netint2) * BITS_IN_BYTE) {
 					row |= (1 << (sizeof(netint2) * BITS_IN_BYTE - x - 1));
 				} else {
-					TracePrint("[!] not enough space to serialize row\n");
-					die("not enough space to serialize row");
+					TracePrint("[!] Not enough space to serialize row\n");
+					die("Not enough space to serialize row");
 				}
 			}
 
 		if (idx >= size) {
-			TracePrint("[!] not enough space to serialize board\n");
-			die("not enough space to serialize board");
+			TracePrint("[!] Not enough space to serialize board\n");
+			die("Not enough space to serialize board");
 		}
 		data[idx++] = hton2(row);
 	}

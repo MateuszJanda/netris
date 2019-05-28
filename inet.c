@@ -286,7 +286,23 @@ ExtFunc char *StrNetPacketType(MyEvent *event)
 	case NP_byeBye:
 		return "NP_byeBye";
 	case NP_boardDump:
-		return "NP_boardDump";
+	{
+		if (event->u.net.size % sizeof(netint2)) {
+			TracePrint("[!] Incorect size of board dump");
+			die("Incorect size of board dump");
+		}
+
+		sprintf(traceBuf, "NP_boardDump size=%d dump=", event->u.net.size);
+		char hex[10];
+		netint2 data;
+		for (int i = 0; i < event->u.net.size; i += sizeof(data)) {
+			memcpy(&data, (char *)event->u.net.data + i, sizeof(data));
+			sprintf(hex, "%04x", ntoh2(data));
+			strcat(traceBuf, hex);
+		}
+
+		return traceBuf;
+	}
 	}
 
 	return "Unknown NetPacketType";

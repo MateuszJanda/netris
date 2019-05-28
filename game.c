@@ -297,6 +297,11 @@ ExtFunc void OneGame(int scr, int scr2)
 						}
 						case NP_newPiece:
 						{
+							netint2 boardDump[boardVisible[scr2]];
+							memset(boardDump, 0, sizeof(boardDump));
+							BoardDump(scr2, sizeof(boardDump), boardDump);
+							SendPacket(NP_boardDump, sizeof(boardDump), boardDump);
+
 							short shapeNum;
 							netint2 data[1];
 
@@ -304,11 +309,6 @@ ExtFunc void OneGame(int scr, int scr2)
 							memcpy(data, event.u.net.data, sizeof(data));
 							shapeNum = ntoh2(data[0]);
 							StartNewPiece(scr2, NetNumToShape(shapeNum));
-
-							netint2 boardDump[boardVisible[scr2]];
-							memset(boardDump, 0, sizeof(boardDump));
-							BoardDump(scr2, sizeof(boardDump), boardDump);
-							SendPacket(NP_boardDump, sizeof(boardDump), boardDump);
 							break;
 						}
 						case NP_down:
