@@ -254,7 +254,7 @@ ExtFunc void InsertJunk(int scr, int count, int column)
 	curY[scr] += count;
 }
 
-ExtFunc void SerializeBoard(int scr, int size, netint2 data[])
+ExtFunc void BoardDump(int scr, int size, netint2 data[])
 {
 	int idx = 0;
 	for (int y = 0; y < boardVisible[scr]; y++) {
@@ -262,15 +262,18 @@ ExtFunc void SerializeBoard(int scr, int size, netint2 data[])
 
 		for (int x = 0; x < boardWidth[scr]; x++)
 			if (board[scr][y][x] != BT_none) {
-				if (x < sizeof(short)) {
+				if (x < sizeof(netint2) * BITS_IN_BYTE) {
 					row |= (1 << (sizeof(short) - x - 1));
 				} else {
+					TracePrint("[!] not enough space to serialize row\n");
 					die("not enough space to serialize row");
 				}
 			}
 
-		if (idx >= size)
+		if (idx >= size) {
+			TracePrint("[!] not enough space to serialize board\n");
 			die("not enough space to serialize board");
+		}
 		data[idx++] = hton2(row);
 	}
 }

@@ -305,10 +305,10 @@ ExtFunc void OneGame(int scr, int scr2)
 							shapeNum = ntoh2(data[0]);
 							StartNewPiece(scr2, NetNumToShape(shapeNum));
 
-							netint2 serialBoard[boardVisible[scr2]];
-							memset(serialBoard, 0, sizeof(serialBoard));
-							SerializeBoard(scr2, sizeof(serialBoard), serialBoard);
-							SendPacket(NP_dumpBoard, sizeof(serialBoard), serialBoard);
+							netint2 boardDump[boardVisible[scr2]];
+							memset(boardDump, 0, sizeof(boardDump));
+							BoardDump(scr2, sizeof(boardDump), boardDump);
+							SendPacket(NP_boardDump, sizeof(boardDump), boardDump);
 							break;
 						}
 						case NP_down:

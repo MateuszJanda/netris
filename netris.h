@@ -63,6 +63,8 @@ typedef long netint4;
 #define ntoh2(x) ntohs(x)
 #define ntoh4(x) ntohl(x)
 
+#define BITS_IN_BYTE 8
+
 #define DEFAULT_PORT 9284	/* Very arbitrary */
 
 #define DEFAULT_KEYS "jJklL mspf^ln "
@@ -105,6 +107,7 @@ typedef enum _NetPacketType { NP_endConn, NP_giveJunk, NP_newPiece,
 							NP_insertJunk, NP_startConn,
 							NP_userName, NP_pause, NP_version,
 							NP_byeBye, NP_boardDump } NetPacketType;
+typedef enum _TraceDir { T_incoming, T_outgoing } TraceDir;
 
 typedef signed char BlockType;
 

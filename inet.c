@@ -175,7 +175,7 @@ static MyEventType NetGenFunc(EventGenRec *gen, MyEvent *event)
 		return E_lostConn;
 	}
 
-	TraceNetPacket(1, event);
+	TraceNetPacket(T_incoming, event);
 	return E_net;
 }
 
@@ -189,7 +189,7 @@ ExtFunc void SendPacket(NetPacketType type, int size, void *data)
 	event.type = E_net;
 	event.u.net.type = type;
 
-	TraceNetPacket(0, &event);
+	TraceNetPacket(T_outgoing, &event);
 
 	netint2 header[2];
 
@@ -201,9 +201,9 @@ ExtFunc void SendPacket(NetPacketType type, int size, void *data)
 		die("write");
 }
 
-ExtFunc void TraceNetPacket(int incomming, MyEvent *event)
+ExtFunc void TraceNetPacket(TraceDir dir, MyEvent *event)
 {
-	const char* marker = incomming ? "[>]" : "[<]";
+	const char* marker = (dir == T_incoming) ? "[>]" : "[<]";
 
 	if (traceFile) {
 		fprintf(traceFile, "%s %s\n", marker, StrNetPacketType(event));
@@ -284,6 +284,8 @@ ExtFunc char *StrNetPacketType(MyEvent *event)
 		return "NP_version";
 	case NP_byeBye:
 		return "NP_byeBye";
+	case NP_boardDump:
+		return "NP_boardDump";
 	}
 
 	return "Unknown NetPacketType";
