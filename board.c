@@ -20,6 +20,7 @@
  */
 
 #include "netris.h"
+#include <netinet/in.h>
 #include <stdlib.h>
 
 #ifdef DEBUG_FALLING
@@ -251,6 +252,27 @@ ExtFunc void InsertJunk(int scr, int count, int column)
 		for (x = 0; x < boardWidth[scr]; ++x)
 			SetBlock(scr, y, x, (x == column) ? BT_none : BT_white);
 	curY[scr] += count;
+}
+
+ExtFunc void SerializeBoard(int scr, int size, netint2 data[])
+{
+	int idx = 0;
+	for (int y = 0; y < boardHeight[scr]; y++) {
+		netint2 row = 0;
+
+		for (int x = 0; x < boardWidth[scr]; x++)
+			if (board[scr][y][x] != BT_none) {
+				if (x < sizeof(short)) {
+					row |= (1 << (sizeof(short) - x - 1));
+				} else {
+					die("not enough space to serialize row");
+				}
+			}
+
+		if (idx >= size)
+			die("not enough space to serialize board");
+		data[idx++] = hton2(row);
+	}
 }
 
 /*
