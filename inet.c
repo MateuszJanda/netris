@@ -188,7 +188,8 @@ ExtFunc void SendPacket(NetPacketType type, int size, void *data)
 	MyEvent event;
 	event.type = E_net;
 	event.u.net.type = type;
-
+	event.u.net.size = size;
+	event.u.net.data = data;
 	TraceNetPacket(T_outgoing, &event);
 
 	netint2 header[2];
