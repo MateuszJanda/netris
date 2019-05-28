@@ -287,7 +287,8 @@ ExtFunc char *StrNetPacketType(MyEvent *event)
 		return "NP_byeBye";
 	case NP_boardDump:
 	{
-		if (event->u.net.size % sizeof(netint2)) {
+		if (event->u.net.size % sizeof(netint2) ||
+			event->u.net.size * HEX_IN_CHAR >= sizeof(traceBuf)) {
 			TracePrint("[!] Incorect size of board dump");
 			die("Incorect size of board dump");
 		}

@@ -63,7 +63,8 @@ typedef long netint4;
 #define ntoh2(x) ntohs(x)
 #define ntoh4(x) ntohl(x)
 
-#define BITS_IN_BYTE 8
+#define BITS_IN_BYTE		8
+#define HEX_IN_CHAR			2
 
 #define DEFAULT_PORT 9284	/* Very arbitrary */
 
