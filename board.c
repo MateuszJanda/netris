@@ -257,7 +257,7 @@ ExtFunc void InsertJunk(int scr, int count, int column)
 ExtFunc void SerializeBoard(int scr, int size, netint2 data[])
 {
 	int idx = 0;
-	for (int y = 0; y < boardHeight[scr]; y++) {
+	for (int y = 0; y < boardVisible[scr]; y++) {
 		netint2 row = 0;
 
 		for (int x = 0; x < boardWidth[scr]; x++)

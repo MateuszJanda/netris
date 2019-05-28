@@ -104,7 +104,7 @@ typedef enum _NetPacketType { NP_endConn, NP_giveJunk, NP_newPiece,
 							NP_rotate, NP_drop, NP_clear,
 							NP_insertJunk, NP_startConn,
 							NP_userName, NP_pause, NP_version,
-							NP_byeBye } NetPacketType;
+							NP_byeBye, NP_boardDump } NetPacketType;
 
 typedef signed char BlockType;
 
