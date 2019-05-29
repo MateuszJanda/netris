@@ -114,9 +114,9 @@ ExtFunc void Usage(void)
 	  "  -H		Show distribution and warranty information\n"
 	  "  -R		Show rules\n"
 	  "\n"
-	  "  -t   Enable tracing to file\n"
-	  "  -f   Enable tracing with redirection to terminal instead file\n"
-	  "  -u   Force single player mode\n",
+	  "  -t		Enable tracing to file\n"
+	  "  -f		Enable tracing with redirection to terminal instead file\n"
+	  "  -u		Force single player mode\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
 
