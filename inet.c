@@ -240,18 +240,16 @@ ExtFunc char *StrNetPacketType(MyEvent *event)
 		return "NP_endConn";
 	case NP_giveJunk:
 	{
-		netint2 data[1];
-
-		memcpy(data, event->u.net.data, sizeof(data));
-		sprintf(traceBuf, "NP_giveJunk count=%d", ntoh2(data[0]));
+		netint2 data;
+		memcpy(&data, event->u.net.data, sizeof(data));
+		sprintf(traceBuf, "NP_giveJunk count=%d", ntoh2(data));
 		return traceBuf;
 	}
 	case NP_newPiece:
 	{
-		netint2 data[1];
-		memcpy(data, event->u.net.data, sizeof(data));
-		short shapeNum = ntoh2(data[0]);
-
+		netint2 data;
+		memcpy(&data, event->u.net.data, sizeof(data));
+		short shapeNum = ntoh2(data);
 		sprintf(traceBuf, "NP_newPiece shape=%d", shapeNum);
 		return traceBuf;
 	}
@@ -272,8 +270,7 @@ ExtFunc char *StrNetPacketType(MyEvent *event)
 		netint2 data[2];
 		memcpy(data, event->u.net.data, sizeof(data));
 		sprintf(traceBuf, "NP_insertJunk count=%d, column=%d", ntoh2(data[0]), ntoh2(data[1]));
-
-		return "NP_insertJunk";
+		return traceBuf;
 	}
 	case NP_startConn:
 		return "NP_startConn";
@@ -302,6 +299,13 @@ ExtFunc char *StrNetPacketType(MyEvent *event)
 			strcat(traceBuf, hex);
 		}
 
+		return traceBuf;
+	}
+	case NP_points:
+	{
+		netint2 data;
+		memcpy(&data, event->u.net.data, sizeof(data));
+		sprintf(traceBuf, "NP_points points=%d", ntoh2(data));
 		return traceBuf;
 	}
 	}

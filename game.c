@@ -329,6 +329,9 @@ ExtFunc void OneGame(int scr, int scr2)
 						case NP_clear:
 							{
 								int cleared = ClearFullLines(scr2);
+								netint2 data = hton2(cleared);
+								SendPacket(NP_points, sizeof(data), &data);
+
 								if (cleared) {
 									enemyLinesCleared += cleared;
 									enemyTotalLinesCleared += cleared;
