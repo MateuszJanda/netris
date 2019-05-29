@@ -48,9 +48,25 @@ ExtFunc void InitUtil(void)
 		SRandom(time(0));
 	signal(SIGINT, CatchInt);
 	ResetBaseTime();
+}
 
-	if (traceToFile) {
-		traceFile = fopen("/dev/pts/0", "w");
+ExtFunc void InitTraceLog()
+{
+	if (traceToFile || forceTraceOnTermianl) {
+		if (forceTraceOnTermianl) {
+			traceFile = fopen("/dev/pts/0", "w");
+		} else {
+			char name[256];
+			time_t timer;
+			struct tm* tm_info;
+
+			time(&timer);
+			tm_info = localtime(&timer);
+			strftime(name, sizeof(name), "%Y%m%d%H%M%S.trace", tm_info);
+
+			traceFile = fopen(name, "w");
+		}
+
 		if (!traceFile) {
 			perror("fopen trace");
 			exit(1);
@@ -99,6 +115,7 @@ ExtFunc void Usage(void)
 	  "  -R		Show rules\n"
 	  "\n"
 	  "  -t   Enable tracing\n"
+	  "  -f   Force tracing redirection to terminal instead file\n"
 	  "  -u   Force single player mode\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
