@@ -327,7 +327,7 @@ ExtFunc void UpdateOpponentDisplay(void)
 			standout();
 #endif
 		attron(A_BOLD);
-		addstr("asdf");
+		addstr(displayStr);
 		attroff(A_BOLD);
 		standend();
 	}
