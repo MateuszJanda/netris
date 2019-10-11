@@ -173,10 +173,10 @@ EXT int standoutEnable, colorEnable;
 EXT int robotEnable, robotVersion, fairRobot;
 EXT int protocolVersion;
 
-EXT int traceToFile;
-EXT int traceToTermianl;
+EXT int traceToFileFlag;
+EXT int traceToTermianlFlag;
 EXT FILE *traceFile;
-EXT int singlePlayer;
+EXT int singlePlayerFlag;
 
 EXT long initSeed;
 EXT long stepDownInterval, speed;

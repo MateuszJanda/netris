@@ -52,8 +52,8 @@ ExtFunc void InitUtil(void)
 
 ExtFunc void InitTraceLog()
 {
-	if (traceToFile || traceToTermianl) {
-		if (traceToTermianl) {
+	if (traceToFileFlag || traceToTermianlFlag) {
+		if (traceToTermianlFlag) {
 			traceFile = fopen("/dev/pts/0", "w");
 		} else {
 			char name[256];

@@ -155,7 +155,7 @@ ExtFunc void OneGame(int scr, int scr2)
 			CheckNetConn();
 			switch (WaitMyEvent(&event, EM_any)) {
 				case E_alarm:
-					if (singlePlayer)
+					if (singlePlayerFlag)
 						break;
 					if (!MovePiece(scr, -1, 0))
 						goto nextPiece;
@@ -174,7 +174,7 @@ ExtFunc void OneGame(int scr, int scr2)
 					if (!p)
 						break;
 				keyEvent:
-					if (singlePlayer)
+					if (singlePlayerFlag)
 						break;
 					if (paused && (key != KT_pause) && (key != KT_redraw))
 						break;
@@ -281,7 +281,7 @@ ExtFunc void OneGame(int scr, int scr2)
 					switch(event.u.net.type) {
 						case NP_giveJunk:
 						{
-							if (singlePlayer)
+							if (singlePlayerFlag)
 								break;
 
 							netint2 data[2];
@@ -413,10 +413,10 @@ ExtFunc int main(int argc, char **argv)
 	char *hostStr = NULL, *portStr = NULL;
 	MyEvent event;
 
-	traceToFile = 0;
-	traceToTermianl = 0;
+	traceToFileFlag = 0;
+	traceToTermianlFlag = 0;
 	traceFile = NULL;
-	singlePlayer = 0;
+	singlePlayerFlag = 0;
 
 	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
@@ -424,13 +424,13 @@ ExtFunc int main(int argc, char **argv)
 	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:tfu")) != -1)
 		switch (ch) {
 			case 'f':
-				traceToFile = 1;
+				traceToFileFlag = 1;
 				break;
 			case 't':
-				traceToTermianl = 1;
+				traceToTermianlFlag = 1;
 				break;
 			case 'u':
-				singlePlayer = 1;
+				singlePlayerFlag = 1;
 				break;
 			case 'c':
 				initConn = 1;
@@ -489,7 +489,7 @@ ExtFunc int main(int argc, char **argv)
 	}
 	if (fairRobot && !robotEnable)
 		fatal("You can't use the -F option without the -r option");
-	if (traceToFile && traceToTermianl)
+	if (traceToFileFlag && traceToTermianlFlag)
 		fatal("Only one option can selected -t or -f");
 	InitTraceLog();
 	InitUtil();
@@ -502,7 +502,7 @@ ExtFunc int main(int argc, char **argv)
 			SRandom(time(0));
 		if (initConn || waitConn) {
 
-			if (singlePlayer) {
+			if (singlePlayerFlag) {
 				game = GT_onePlayer;
 				TracePrint("[+] Game: single player\n");
 			}
