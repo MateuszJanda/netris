@@ -421,7 +421,7 @@ ExtFunc int main(int argc, char **argv)
 	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
 	MapKeys(DEFAULT_KEYS);
-	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:tfu")) != -1)
+	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ftu")) != -1)
 		switch (ch) {
 			case 'f':
 				traceToFileFlag = 1;
@@ -491,6 +491,8 @@ ExtFunc int main(int argc, char **argv)
 		fatal("You can't use the -F option without the -r option");
 	if (traceToFileFlag && traceToTermianlFlag)
 		fatal("Only one option can selected -t or -f");
+	if (singlePlayerFlag && !waitConn)
+		fatal("-u (single mode) make sense only when you want track network packages (use -w also)");
 	InitTraceLog();
 	InitUtil();
 	InitScreens();

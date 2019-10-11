@@ -116,7 +116,7 @@ ExtFunc void Usage(void)
 	  "\n"
 	  "  -f		Enable tracing to file (%%Y%%m%%d%%H%%M%%S.trace)\n"
 	  "  -t		Enable tracing to terminal (/dev/pts/0)\n"
-	  "  -u		Force single player mode\n",
+	  "  -u		Force single player mode for network connection\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
 
