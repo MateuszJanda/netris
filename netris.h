@@ -174,7 +174,7 @@ EXT int robotEnable, robotVersion, fairRobot;
 EXT int protocolVersion;
 
 EXT int traceToFile;
-EXT int forceTraceOnTermianl;
+EXT int traceToTermianl;
 EXT FILE *traceFile;
 EXT int singlePlayer;
 

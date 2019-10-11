@@ -414,7 +414,7 @@ ExtFunc int main(int argc, char **argv)
 	MyEvent event;
 
 	traceToFile = 0;
-	forceTraceOnTermianl = 0;
+	traceToTermianl = 0;
 	traceFile = NULL;
 	singlePlayer = 0;
 
@@ -423,11 +423,11 @@ ExtFunc int main(int argc, char **argv)
 	MapKeys(DEFAULT_KEYS);
 	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:tfu")) != -1)
 		switch (ch) {
-			case 't':
+			case 'f':
 				traceToFile = 1;
 				break;
-			case 'f':
-				forceTraceOnTermianl = 1;
+			case 't':
+				traceToTermianl = 1;
 				break;
 			case 'u':
 				singlePlayer = 1;
@@ -489,6 +489,8 @@ ExtFunc int main(int argc, char **argv)
 	}
 	if (fairRobot && !robotEnable)
 		fatal("You can't use the -F option without the -r option");
+	if (traceToFile && traceToTermianl)
+		fatal("Only one option can selected -t or -f");
 	InitTraceLog();
 	InitUtil();
 	InitScreens();

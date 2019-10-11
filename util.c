@@ -52,8 +52,8 @@ ExtFunc void InitUtil(void)
 
 ExtFunc void InitTraceLog()
 {
-	if (traceToFile || forceTraceOnTermianl) {
-		if (forceTraceOnTermianl) {
+	if (traceToFile || traceToTermianl) {
+		if (traceToTermianl) {
 			traceFile = fopen("/dev/pts/0", "w");
 		} else {
 			char name[256];
@@ -114,8 +114,8 @@ ExtFunc void Usage(void)
 	  "  -H		Show distribution and warranty information\n"
 	  "  -R		Show rules\n"
 	  "\n"
-	  "  -t		Enable tracing to file\n"
-	  "  -f		Enable tracing with redirection to terminal instead file\n"
+	  "  -f		Enable tracing to file (%%Y%%m%%d%%H%%M%%S.trace)\n"
+	  "  -t		Enable tracing to terminal (/dev/pts/0)\n"
 	  "  -u		Force single player mode\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
