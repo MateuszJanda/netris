@@ -1,4 +1,4 @@
-# Run server (single mode player with tracing enabled)
-./netris -t -u -w
+# Run server (single mode player/wait for connection/enable tracing)
+./netris -u -w -f
 # Connect clinet
 ./netris -c localhost
