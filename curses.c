@@ -95,6 +95,9 @@ ExtFunc void InitScreens(void)
 		for (i = 0; myColorTable[i].type != BT_none; ++i)
 			init_pair(myColorTable[i].type, COLOR_BLACK,
 					myColorTable[i].color);
+
+		/* Initiate user display color */
+		init_pair(DISPLAY_COLOR, COLOR_YELLOW, COLOR_BLACK);
 	}
 #else
 	haveColor = 0;
@@ -315,8 +318,24 @@ ExtFunc void ShowDisplayInfo(void)
 ExtFunc void UpdateOpponentDisplay(void)
 {
 	move(1, 0);
-	printw("Playing %s@%s", opponentName, opponentHost);
-	clrtoeol();
+	if (displayStr)
+	{
+#ifdef HAVE_NCURSES
+		if (haveColor)
+			attrset(COLOR_PAIR(DISPLAY_COLOR));
+		else
+			standout();
+#endif
+		attron(A_BOLD);
+		addstr("asdf");
+		attroff(A_BOLD);
+		standend();
+	}
+	else
+	{
+		printw("Playing %s@%s", opponentName, opponentHost);
+		clrtoeol();
+	}
 }
 
 ExtFunc void ShowPause(int pausedByMe, int pausedByThem)

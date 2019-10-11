@@ -66,6 +66,7 @@ typedef long netint4;
 #define BITS_IN_BYTE		8
 #define HEX_IN_CHAR			2
 #define ALWAYS_RENDER		1
+#define DISPLAY_COLOR		20
 
 #define DEFAULT_PORT 9284	/* Very arbitrary */
 
@@ -178,6 +179,7 @@ EXT int traceToFileFlag;
 EXT int traceToTermianlFlag;
 EXT FILE *traceFile;
 EXT int singlePlayerFlag;
+EXT char* displayStr;
 
 EXT long initSeed;
 EXT long stepDownInterval, speed;

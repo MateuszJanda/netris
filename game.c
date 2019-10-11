@@ -419,11 +419,12 @@ ExtFunc int main(int argc, char **argv)
 	traceToTermianlFlag = 0;
 	traceFile = NULL;
 	singlePlayerFlag = 0;
+	displayStr = NULL;
 
 	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
 	MapKeys(DEFAULT_KEYS);
-	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ftu")) != -1)
+	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ftud:")) != -1)
 		switch (ch) {
 			case 'f':
 				traceToFileFlag = 1;
@@ -433,6 +434,9 @@ ExtFunc int main(int argc, char **argv)
 				break;
 			case 'u':
 				singlePlayerFlag = 1;
+				break;
+			case 'd':
+				displayStr = optarg;
 				break;
 			case 'c':
 				initConn = 1;
