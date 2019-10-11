@@ -65,6 +65,7 @@ typedef long netint4;
 
 #define BITS_IN_BYTE		8
 #define HEX_IN_CHAR			2
+#define ALWAYS_RENDER		1
 
 #define DEFAULT_PORT 9284	/* Very arbitrary */
 

@@ -80,7 +80,7 @@ ExtFunc void MapKeys(char *newKeys)
 		exit(1);
 }
 
-ExtFunc int StartNewPiece(int scr, Shape *shape)
+ExtFunc int StartNewPiece(int scr, Shape *shape, int render)
 {
 	curShape[scr] = shape;
 	curY[scr] = boardVisible[scr] + 4;
@@ -89,7 +89,8 @@ ExtFunc int StartNewPiece(int scr, Shape *shape)
 		--curY[scr];
 	if (!ShapeFits(shape, scr, curY[scr], curX[scr]))
 		return 0;
-	PlotShape(shape, scr, curY[scr], curX[scr], 1);
+	if (render)
+		PlotShape(shape, scr, curY[scr], curX[scr], 1);
 	return 1;
 }
 
@@ -133,7 +134,7 @@ ExtFunc void OneGame(int scr, int scr2)
 		RobotCmd(0, "BeginGame\n");
 		RobotTimeStamp();
 	}
-	while (StartNewPiece(scr, ChooseOption(stdOptions))) {
+	while (StartNewPiece(scr, ChooseOption(stdOptions), !singlePlayerFlag)) {
 		if (robotEnable && !fairRobot)
 			RobotCmd(1, "NewPiece %d\n", ++pieceCount);
 		if (spied) {
@@ -142,7 +143,8 @@ ExtFunc void OneGame(int scr, int scr2)
 
 			shapeNum = ShapeToNetNum(curShape[scr]);
 			data[0] = hton2(shapeNum);
-			SendPacket(NP_newPiece, sizeof(data), data);
+			if (!singlePlayerFlag)
+				SendPacket(NP_newPiece, sizeof(data), data);
 		}
 		for (;;) {
 			changed = RefreshBoard(scr) || changed;
@@ -308,7 +310,7 @@ ExtFunc void OneGame(int scr, int scr2)
 							FreezePiece(scr2);
 							memcpy(data, event.u.net.data, sizeof(data));
 							shapeNum = ntoh2(data[0]);
-							StartNewPiece(scr2, NetNumToShape(shapeNum));
+							StartNewPiece(scr2, NetNumToShape(shapeNum), ALWAYS_RENDER);
 							break;
 						}
 						case NP_down:
