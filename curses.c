@@ -317,17 +317,14 @@ ExtFunc void ShowDisplayInfo(void)
 
 ExtFunc void UpdateOpponentDisplay(void)
 {
-	if (displayStr)
-		return;
-
 	move(1, 0);
 	printw("Playing %s@%s", opponentName, opponentHost);
 	clrtoeol();
 }
 
-ExtFunc void UpdateDisplay()
+ExtFunc void ChangeDisplay(char *str)
 {
-	if (displayStr)
+	if (str)
 	{
 		move(1, 0);
 #ifdef HAVE_NCURSES
@@ -337,11 +334,13 @@ ExtFunc void UpdateDisplay()
 			standout();
 #endif
 		attron(A_BOLD);
-		addstr(displayStr);
+		addstr(str);
+		clrtoeol();
 		attroff(A_BOLD);
 		standend();
 	}
 }
+
 
 ExtFunc void ShowPause(int pausedByMe, int pausedByThem)
 {
@@ -361,12 +360,19 @@ ExtFunc void Message(char *s)
 {
 	static int line = 0;
 
-	move(statusYPos - 20 + line, statusXPos);
-	addstr(s);	/* XXX Should truncate long lines */
-	clrtoeol();
-	line = (line + 1) % 10;
-	move(statusYPos - 20 + line, statusXPos);
-	clrtoeol();
+	// Speciacl Message will be displayed on oponent display
+	if (!strncmp(s, "Disp ", 5)) {
+		ChangeDisplay(s + 5);
+	}
+	else
+	{
+		move(statusYPos - 20 + line, statusXPos);
+		addstr(s);	/* XXX Should truncate long lines */
+		clrtoeol();
+		line = (line + 1) % 10;
+		move(statusYPos - 20 + line, statusXPos);
+		clrtoeol();
+	}
 }
 
 ExtFunc void RefreshScreen(void)
