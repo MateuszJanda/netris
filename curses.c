@@ -317,9 +317,19 @@ ExtFunc void ShowDisplayInfo(void)
 
 ExtFunc void UpdateOpponentDisplay(void)
 {
+	if (displayStr)
+		return;
+
 	move(1, 0);
+	printw("Playing %s@%s", opponentName, opponentHost);
+	clrtoeol();
+}
+
+ExtFunc void UpdateDisplay()
+{
 	if (displayStr)
 	{
+		move(1, 0);
 #ifdef HAVE_NCURSES
 		if (haveColor)
 			attrset(COLOR_PAIR(DISPLAY_COLOR));
@@ -330,11 +340,6 @@ ExtFunc void UpdateOpponentDisplay(void)
 		addstr(displayStr);
 		attroff(A_BOLD);
 		standend();
-	}
-	else
-	{
-		printw("Playing %s@%s", opponentName, opponentHost);
-		clrtoeol();
 	}
 }
 

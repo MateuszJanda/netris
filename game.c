@@ -115,6 +115,7 @@ ExtFunc void OneGame(int scr, int scr2)
 		InitBoard(scr2);
 		UpdateOpponentDisplay();
 	}
+	UpdateDisplay();
 	ShowDisplayInfo();
 	SetITimer(speed, speed);
 	if (robotEnable) {
