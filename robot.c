@@ -114,7 +114,7 @@ ExtFunc void CloseRobot(void)
 	RemoveEventGen(&robotGen);
 	if(toRobot) {
 		if (robotProcess > 0)
-			RobotCmd(1, "Exit\n");
+			RobotCmd(1, "Exit %d %d %d %d\n", won, lost, myLinesCleared, enemyLinesCleared);
 		fclose(toRobot);
 		close(fromRobotFd);
 		toRobot = NULL;
