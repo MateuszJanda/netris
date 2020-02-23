@@ -113,7 +113,7 @@ ExtFunc void Usage(void)
 	  "  -C		Disable color\n"
 	  "  -H		Show distribution and warranty information\n"
 	  "  -R		Show rules\n"
-	  "\n"
+	  "\nAdditional (tracing) options:\n"
 	  "  -f		Enable tracing to file (%%Y%%m%%d%%H%%M%%S.trace)\n"
 	  "  -t		Enable tracing to terminal (/dev/pts/0)\n"
 	  "  -u		Force single player mode for network connection\n"
