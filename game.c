@@ -113,9 +113,8 @@ ExtFunc void OneGame(int scr, int scr2)
 		spied = 1;
 		spying = 1;
 		InitBoard(scr2);
-		UpdateOpponentDisplay();
 	}
-	ChangeDisplay(displayStr);
+	UpdateUserDisplay(displayStr);
 	ShowDisplayInfo();
 	SetITimer(speed, speed);
 	if (robotEnable) {

@@ -315,17 +315,11 @@ ExtFunc void ShowDisplayInfo(void)
 	}
 }
 
-ExtFunc void UpdateOpponentDisplay(void)
-{
-	move(1, 0);
-	printw("Playing %s@%s", opponentName, opponentHost);
-	clrtoeol();
-}
-
-ExtFunc void ChangeDisplay(char *str)
+ExtFunc void UpdateUserDisplay(char *str)
 {
 	if (str)
 	{
+		// Print user string at second line
 		move(1, 0);
 #ifdef HAVE_NCURSES
 		if (haveColor)
@@ -338,6 +332,12 @@ ExtFunc void ChangeDisplay(char *str)
 		clrtoeol();
 		attroff(A_BOLD);
 		standend();
+	} else {
+		// Default behavior (old UpdateOpponentDisplay).
+		// Dispaly oponent name and his host name.
+		move(1, 0);
+		printw("Playing %s@%s", opponentName, opponentHost);
+		clrtoeol();
 	}
 }
 
@@ -360,9 +360,9 @@ ExtFunc void Message(char *s)
 {
 	static int line = 0;
 
-	// Speciacl Message will be displayed on oponent display
+	// Speciacl Message will be displayed on "user display" (at second line)
 	if (!strncmp(s, "Disp ", 5)) {
-		ChangeDisplay(s + 5);
+		UpdateUserDisplay(s + 5);
 	}
 	else
 	{
