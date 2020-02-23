@@ -642,6 +642,7 @@ ExtFunc int main(int argc, char **argv)
 			RefreshScreen();
 			while(getchar() != keyTable[KT_new])
 				;
+			InitTraceLog();
 		}
 	}
 
