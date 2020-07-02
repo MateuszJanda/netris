@@ -1,5 +1,9 @@
-Modified version of [Netris by Mark H. Weaver](https://github.com/naclander/netris) to track and archive network communication.
-Read original [README](README) file.
+Modified version of [Netris by Mark H. Weaver](https://github.com/naclander/netris) - Tetris like game - used as a machine learning environment with features like:
+- network communication tracking for supervised learning
+- options disabling unnecessary delays for reinforcement learning
+- diagnostics
+
+Please read original [README](README) file.
 
 ## Additional options added to client
 ```bash
