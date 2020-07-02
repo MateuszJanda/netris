@@ -220,7 +220,11 @@ ExtFunc void OneGame(int scr, int scr2)
 							if (DropPiece(scr) > 0) {
 								if (spied)
 									SendPacket(NP_drop, 0, NULL);
-								SetITimer(speed, speed);
+
+								if (noDropDelayFlag)
+									SetITimer(speed, MIN_SLIDING_INTERVAL);
+								else
+									SetITimer(speed, speed);
 							}
 							dropMode = dropModeEnable;
 							break;
@@ -420,12 +424,14 @@ ExtFunc int main(int argc, char **argv)
 	traceFile = NULL;
 	singlePlayerFlag = 0;
 	displayStr = NULL;
+	noDropDelayFlag = 0;
 
 	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
 	MapKeys(DEFAULT_KEYS);
-	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ftud:")) != -1)
+	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ftund:")) != -1)
 		switch (ch) {
+			// Additional options for machine learning environment
 			case 'f':
 				traceToFileFlag = 1;
 				break;
@@ -438,6 +444,11 @@ ExtFunc int main(int argc, char **argv)
 			case 'd':
 				displayStr = optarg;
 				break;
+			case 'n':
+				noDropDelayFlag = 1;
+				break;
+
+			// Original options:
 			case 'c':
 				initConn = 1;
 				hostStr = optarg;

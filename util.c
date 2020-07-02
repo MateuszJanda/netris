@@ -113,11 +113,13 @@ ExtFunc void Usage(void)
 	  "  -C		Disable color\n"
 	  "  -H		Show distribution and warranty information\n"
 	  "  -R		Show rules\n"
-	  "\nAdditional (tracing) options:\n"
+	  "\nAdditional options for machine learning environment:\n"
 	  "  -f		Enable tracing to file (%%Y%%m%%d%%H%%M%%S.trace)\n"
 	  "  -t		Enable tracing to terminal (/dev/pts/0)\n"
 	  "  -u		Force single player mode for network connection\n"
-	  "  -d		Replace default message on display\n",
+	  "  -d		Replace default message on display\n"
+	  "  -n		No delay after drop/no cliff sliding (truly it's"
+	  "		 decreased to 1 microsecond)\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
 
