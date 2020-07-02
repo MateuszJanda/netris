@@ -11,6 +11,7 @@ Please read original [README](README) file.
   -t        Enable tracing to terminal (/dev/pts/0)
   -u        Force single player mode for network connection
   -d        Replace default message on display
+  -n        No delay after drop/no cliff sliding (truly it's decreased to 1 microsecond)
 ```
 
 ## Usage examples
