@@ -52,9 +52,9 @@ ExtFunc void InitUtil(void)
 
 ExtFunc void InitTraceLog()
 {
-	if (traceToFileFlag || traceToTermianlFlag) {
-		if (traceToTermianlFlag) {
-			traceFile = fopen("/dev/pts/0", "w");
+	if (traceToFileFlag || traceTerminalFd) {
+		if (traceTerminalFd) {
+			traceFile = fopen(traceTerminalFd, "w");
 		} else {
 			char name[256];
 			time_t timer;
@@ -115,7 +115,7 @@ ExtFunc void Usage(void)
 	  "  -R		Show rules\n"
 	  "\nAdditional options for machine learning environment:\n"
 	  "  -f		Enable tracing to file (%%Y%%m%%d%%H%%M%%S.trace)\n"
-	  "  -t		Enable tracing to terminal (/dev/pts/0)\n"
+	  "  -t		Enable tracing to terminal (e.g. /dev/pts/0)\n"
 	  "  -u		Force single player mode for network connection\n"
 	  "  -d		Replace default message on display\n"
 	  "  -n		Disable cliff sliding after drop (truly delay is decreased\n"

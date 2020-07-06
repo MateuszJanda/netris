@@ -177,8 +177,8 @@ EXT int robotEnable, robotVersion, fairRobot;
 EXT int protocolVersion;
 
 EXT int traceToFileFlag;
-EXT int traceToTermianlFlag;
 EXT FILE *traceFile;
+EXT char* traceTerminalFd;
 EXT int singlePlayerFlag;
 EXT char* displayStr;
 EXT int noDropDelayFlag;

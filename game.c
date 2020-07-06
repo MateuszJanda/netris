@@ -420,8 +420,8 @@ ExtFunc int main(int argc, char **argv)
 	MyEvent event;
 
 	traceToFileFlag = 0;
-	traceToTermianlFlag = 0;
 	traceFile = NULL;
+	traceTerminalFd = NULL;
 	singlePlayerFlag = 0;
 	displayStr = NULL;
 	noDropDelayFlag = 0;
@@ -429,14 +429,14 @@ ExtFunc int main(int argc, char **argv)
 	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
 	MapKeys(DEFAULT_KEYS);
-	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ftund:")) != -1)
+	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ft:und:")) != -1)
 		switch (ch) {
 			// Additional options for machine learning environment
 			case 'f':
 				traceToFileFlag = 1;
 				break;
 			case 't':
-				traceToTermianlFlag = 1;
+				traceTerminalFd = optarg;
 				break;
 			case 'u':
 				singlePlayerFlag = 1;
@@ -506,7 +506,7 @@ ExtFunc int main(int argc, char **argv)
 	}
 	if (fairRobot && !robotEnable)
 		fatal("You can't use the -F option without the -r option");
-	if (traceToFileFlag && traceToTermianlFlag)
+	if (traceToFileFlag && traceTerminalFd)
 		fatal("Only one option can selected -t or -f");
 	if (singlePlayerFlag && !waitConn)
 		fatal("-u (single mode) make sense only when you want track network packages (use -w also)");
