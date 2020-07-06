@@ -360,9 +360,9 @@ ExtFunc void Message(char *s)
 {
 	static int line = 0;
 
-	// Speciacl Message will be displayed on "user display" (at second line)
-	if (!strncmp(s, "Disp ", 5)) {
-		UpdateUserDisplay(s + 5);
+	// "Message Ext:Disp" will be displayed on "user display" (at second line)
+	if (!strncmp(s, "Ext:Disp ", 9)) {
+		UpdateUserDisplay(s + 9);
 	}
 	else
 	{

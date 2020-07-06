@@ -228,7 +228,13 @@ ExtFunc int ClearFullLines(int scr)
 			++from;
 		CopyLine(scr, from++, to++);
 	}
-	return from - to;
+
+	const int fullLines = from - to;
+	if (robotEnable) {
+		RobotCmd(0, "Ext:LinesCleared %d %d\n", scr, fullLines);
+	}
+
+	return fullLines;
 }
 
 ExtFunc void FreezePiece(int scr)
