@@ -118,8 +118,8 @@ ExtFunc void Usage(void)
 	  "  -t		Enable tracing to terminal (/dev/pts/0)\n"
 	  "  -u		Force single player mode for network connection\n"
 	  "  -d		Replace default message on display\n"
-	  "  -n		No delay after drop/no cliff sliding (truly it's\n"
-	  "		 decreased to 1 microsecond)\n\n",
+	  "  -n		Disable cliff sliding after drop (truly delay is decreased\n"
+	  "		to 1 microsecond)\n\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
 
