@@ -228,7 +228,7 @@ ExtFunc char *StrMyEventType(MyEvent *event)
 	case E_robot:
 		return "E_robot";
 	case E_lostRobot:
-		return "E_robot";
+		return "E_lostRobot";
 	}
 
 	return "Unknown MyEventType";

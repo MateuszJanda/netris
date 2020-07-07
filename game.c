@@ -646,6 +646,11 @@ ExtFunc int main(int argc, char **argv)
 		CloseNet();
 		if (robotEnable) {
 			CloseRobot();
+		} else if (singlePlayerFlag) {
+			gameState = STATE_WAIT_KEYPRESS;
+			ShowDisplayInfo();
+			RefreshScreen();
+			InitTraceLog();
 		} else {
 			gameState = STATE_WAIT_KEYPRESS;
 			ShowDisplayInfo();
