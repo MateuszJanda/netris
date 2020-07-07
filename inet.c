@@ -166,6 +166,8 @@ static MyEventType NetGenFunc(EventGenRec *gen, MyEvent *event)
 	event->u.net.size = size - HEADER_SIZE;
 	event->u.net.data = netBuf + HEADER_SIZE;
 
+	TraceNetPacket(T_incoming, event);
+
 	if (type == NP_endConn) {
 		gotEndConn = 1;
 		return E_lostConn;
@@ -175,7 +177,6 @@ static MyEventType NetGenFunc(EventGenRec *gen, MyEvent *event)
 		return E_lostConn;
 	}
 
-	TraceNetPacket(T_incoming, event);
 	return E_net;
 }
 
