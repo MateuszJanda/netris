@@ -119,7 +119,8 @@ ExtFunc void Usage(void)
 	  "  -u		Force single player mode for network connection\n"
 	  "  -d		Replace default message on display\n"
 	  "  -n		Disable cliff sliding after drop (truly delay is decreased\n"
-	  "		to 1 microsecond)\n\n",
+	  "		to 1 microsecond)\n"
+	  "  -m		Disable EM_Net delay for new game\n\n",
 	  version_string, DEFAULT_PORT, DEFAULT_KEYS);
 }
 

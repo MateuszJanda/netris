@@ -425,11 +425,12 @@ ExtFunc int main(int argc, char **argv)
 	singlePlayerFlag = 0;
 	displayStr = NULL;
 	noDropDelayFlag = 0;
+	noNetDelayForNewGameFlag = 0;
 
 	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
 	MapKeys(DEFAULT_KEYS);
-	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ft:und:")) != -1)
+	while ((ch = getopt(argc, argv, "hHRs:r:Fk:c:woDSCp:i:ft:unmd:")) != -1)
 		switch (ch) {
 			// Additional options for machine learning environment
 			case 'f':
@@ -446,6 +447,9 @@ ExtFunc int main(int argc, char **argv)
 				break;
 			case 'n':
 				noDropDelayFlag = 1;
+				break;
+			case 'm':
+				noNetDelayForNewGameFlag = 1;
 				break;
 
 			// Original options:
@@ -641,7 +645,9 @@ ExtFunc int main(int argc, char **argv)
 			won++;
 		} else {
 			lost++;
-			WaitMyEvent(&event, EM_net);
+			if (!noNetDelayForNewGameFlag) {
+				WaitMyEvent(&event, EM_net);
+			}
 		}
 		CloseNet();
 		if (robotEnable) {

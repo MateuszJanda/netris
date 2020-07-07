@@ -182,6 +182,7 @@ EXT char* traceTerminalFd;
 EXT int singlePlayerFlag;
 EXT char* displayStr;
 EXT int noDropDelayFlag;
+EXT int noNetDelayForNewGameFlag;
 
 EXT long initSeed;
 EXT long stepDownInterval, speed;
