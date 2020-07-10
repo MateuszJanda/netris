@@ -48,6 +48,7 @@ ExtFunc void InitRobot(char *robotProg)
 	int to[2], from[2];
 	int status;
 	MyEvent event;
+	char buff[1024] = {};
 
 	signal(SIGPIPE, CatchPipe);
 	AtExit(CloseRobot);
@@ -82,8 +83,10 @@ ExtFunc void InitRobot(char *robotProg)
 	if (WaitMyEvent(&event, EM_robot) != E_robot)
 		fatal("Robot didn't start successfully");
 	if (1 > sscanf(event.u.robot.data, "Version %d", &robotVersion)
-			|| robotVersion < 1)
-		fatal("Invalid Version line from robot");
+			|| robotVersion < 1) {
+		sprintf(buff, "Invalid Version line from robot, (len=%ld): \"%s\"", strlen(event.u.robot.data), event.u.robot.data);
+		fatal(buff);
+	}
 	if (robotVersion > ROBOT_VERSION)
 		robotVersion = ROBOT_VERSION;
 }
