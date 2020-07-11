@@ -27,6 +27,7 @@
 #include <stdarg.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <time.h>
 #include <errno.h>
 
 static MyEventType RobotGenFunc(EventGenRec *gen, MyEvent *event);
@@ -116,8 +117,15 @@ ExtFunc void CloseRobot(void)
 {
 	RemoveEventGen(&robotGen);
 	if(toRobot) {
-		if (robotProcess > 0)
+		if (robotProcess > 0) {
 			RobotCmd(1, "Exit %d %d %d %d\n", won, lost, myLinesCleared, enemyLinesCleared);
+
+			// Delay flcose(), give fflush() chance to deliver "Exit" command to robot
+			struct timespec ts = {};
+			ts.tv_sec = 0;
+			ts.tv_nsec = 500 * 1000; // 500 ms
+			nanosleep(&ts, &ts);
+		}
 		fclose(toRobot);
 		close(fromRobotFd);
 		toRobot = NULL;
@@ -167,10 +175,21 @@ static MyEventType RobotGenFunc(EventGenRec *gen, MyEvent *event)
 	}
 	*p = 0;
 	robotBufMsg = p - robotBuf + 1;
+
+	// Suppress multiple new lines
+	for (size_t i = robotBufMsg; i < robotBufSize; i++) {
+		if (robotBuf[i] == '\n') {
+			robotBufMsg++;
+		} else {
+			break;
+		}
+	}
+
 	robotGen.ready = more = (memchr(robotBuf + robotBufMsg, '\n',
 			robotBufSize - robotBufMsg) != NULL);
 	event->u.robot.size = p - robotBuf;
 	event->u.robot.data = robotBuf;
+
 	return E_robot;
 }
 
