@@ -122,8 +122,8 @@ ExtFunc void CloseRobot(void)
 
 			// Delay flcose(), give fflush() chance to deliver "Exit" command to robot
 			struct timespec ts = {};
-			ts.tv_sec = 0;
-			ts.tv_nsec = 500 * 1000; // 500 ms
+			ts.tv_sec = 1;
+			ts.tv_nsec = 0 * 1000; // 0 ms
 			nanosleep(&ts, &ts);
 		}
 		fclose(toRobot);
