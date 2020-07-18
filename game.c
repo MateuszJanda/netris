@@ -668,6 +668,7 @@ ExtFunc int main(int argc, char **argv)
 			won++;
 		} else {
 			lost++;
+			// Don't wait for net event, to start new game
 			if (!noNetDelayForNewGameFlag) {
 				WaitMyEvent(&event, EM_net);
 			}
@@ -679,15 +680,16 @@ ExtFunc int main(int argc, char **argv)
 			gameState = STATE_WAIT_KEYPRESS;
 			ShowDisplayInfo();
 			RefreshScreen();
-			InitTraceLog();
 		} else {
 			gameState = STATE_WAIT_KEYPRESS;
 			ShowDisplayInfo();
 			RefreshScreen();
 			while(getchar() != keyTable[KT_new])
 				;
-			InitTraceLog();
 		}
+
+		CloseTraceLog();
+		InitTraceLog();
 	}
 
 	return 0;

@@ -336,7 +336,10 @@ ExtFunc void CloseNet(void)
 	}
 	if (netGen.next)
 		RemoveEventGen(&netGen);
+}
 
+ExtFunc void CloseTraceLog(void)
+{
 	if (traceFile) {
 		fclose(traceFile);
 		traceFile = NULL;
