@@ -96,7 +96,12 @@ ExtFunc int RefreshBoard(int scr)
 						b = abs(b);
 					RobotCmd(0, " %d", b);
 				}
-				RobotCmd(0, "\n");
+				// Flush if first line changed. After this command robot can start his analysis.
+				if (y == boardVisible[scr] - 1) {
+					RobotCmd(1, "\n");
+				} else {
+					RobotCmd(0, "\n");
+				}
 			}
 			changed[scr][y] = 0;
 			any = 1;

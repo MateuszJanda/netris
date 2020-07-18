@@ -145,7 +145,7 @@ ExtFunc void OneGame(int scr, int scr2)
 		if (robotEnable && !fairRobot) {
 			++pieceCount;
 			RobotCmd(1, "NewPiece %d\n", pieceCount);
-			// This one shot timer, helps often fix problem with not working fflush()
+			// This one-shot timer, helps often fix problem with not working fflush()
 			SetITimer(MIN_SLIDING_INTERVAL, MIN_SLIDING_INTERVAL);
 			oneShotTimerActive = 1;
 		}
@@ -171,7 +171,7 @@ ExtFunc void OneGame(int scr, int scr2)
 				case E_alarm:
 					if (singlePlayerFlag)
 						break;
-					// Dirty trick. This one shot timer, often (but not always) helps fix problem with not working
+					// Dirty trick. This one-shot timer, often (but not always) helps fix problem with not working
 					// fflush() (triggered by RobotCmd), and speedup game when noDropDelayFlag is enabled.
 					// Maybe kernel thread differently multiple write() operation when they are scattered over time
 					if (oneShotTimerActive) {
