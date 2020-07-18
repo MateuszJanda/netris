@@ -105,6 +105,8 @@ ExtFunc void OneGame(int scr, int scr2)
 	int key;
 	char *p, *cmd;
 
+	int oneShotTimerActive = 0;
+
 	myLinesCleared = enemyLinesCleared = 0;
 	speed = stepDownInterval;
 	ResetBaseTime();
@@ -116,7 +118,12 @@ ExtFunc void OneGame(int scr, int scr2)
 	}
 	UpdateUserDisplay(displayStr);
 	ShowDisplayInfo();
-	SetITimer(speed, speed);
+	if (noDropDelayFlag) {
+		SetITimer(MIN_SLIDING_INTERVAL, MIN_SLIDING_INTERVAL);
+	} else {
+		SetITimer(speed, speed);
+	}
+
 	if (robotEnable) {
 		RobotCmd(0, "GameType %s\n", gameNames[game]);
 		RobotCmd(0, "BoardSize 0 %d %d\n",
@@ -135,8 +142,13 @@ ExtFunc void OneGame(int scr, int scr2)
 		RobotTimeStamp();
 	}
 	while (StartNewPiece(scr, ChooseOption(stdOptions), !singlePlayerFlag)) {
-		if (robotEnable && !fairRobot)
-			RobotCmd(1, "NewPiece %d\n", ++pieceCount);
+		if (robotEnable && !fairRobot) {
+			++pieceCount;
+			RobotCmd(1, "NewPiece %d\n", pieceCount);
+			// This one shot timer, helps often fix problem with not working fflush()
+			SetITimer(MIN_SLIDING_INTERVAL, MIN_SLIDING_INTERVAL);
+			oneShotTimerActive = 1;
+		}
 		if (spied) {
 			short shapeNum;
 			netint2 data[1];
@@ -159,6 +171,14 @@ ExtFunc void OneGame(int scr, int scr2)
 				case E_alarm:
 					if (singlePlayerFlag)
 						break;
+					// Dirty trick. This one shot timer, often (but not always) helps fix problem with not working
+					// fflush() (triggered by RobotCmd), and speedup game when noDropDelayFlag is enabled.
+					// Maybe kernel thread differently multiple write() operation when they are scattered over time
+					if (oneShotTimerActive) {
+						oneShotTimerActive = 0;
+						SetITimer(speed, speed);
+						break;
+					}
 					if (!MovePiece(scr, -1, 0))
 						goto nextPiece;
 					else if (spied)
@@ -221,11 +241,13 @@ ExtFunc void OneGame(int scr, int scr2)
 								if (spied)
 									SendPacket(NP_drop, 0, NULL);
 
-								if (noDropDelayFlag)
-									SetITimer(speed, MIN_SLIDING_INTERVAL);
-								else
+								if (noDropDelayFlag) {
+									SetITimer(MIN_SLIDING_INTERVAL, MIN_SLIDING_INTERVAL);
+								} else {
 									SetITimer(speed, speed);
+								}
 							}
+							oneShotTimerActive = 0;
 							dropMode = dropModeEnable;
 							break;
 						case KT_pause:
@@ -380,10 +402,11 @@ ExtFunc void OneGame(int scr, int scr2)
 					break;
 			}
 			if (paused != oldPaused) {
-				if (paused)
+				if (paused) {
 					pauseTimeLeft = SetITimer(0, 0);
-				else
+				} else {
 					SetITimer(speed, pauseTimeLeft);
+				}
 				oldPaused = paused;
 			}
 		}

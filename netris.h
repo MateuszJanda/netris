@@ -82,7 +82,7 @@ typedef long netint4;
 #define MAX_SCREENS			2
 
 #define DEFAULT_INTERVAL	300000	/* Step-down interval in microseconds */
-#define MIN_SLIDING_INTERVAL	1	/* Interval after drop in microseconds - only when noDropDelayFlag is enabled */
+#define MIN_SLIDING_INTERVAL 10000	/* Minimal interval after drop to disable possible sliding, and 0 not work (in microseconds) */
 
 /* NP_startConn flags */
 #define SCF_usingRobot		000001

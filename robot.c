@@ -104,8 +104,9 @@ ExtFunc void RobotCmd(int flush, char *fmt, ...)
 	va_start(args, fmt);
 	vfprintf(toRobot, fmt, args);
 	va_end(args);
-	if (flush)
+	if (flush) {
 		fflush(toRobot);
+	}
 }
 
 ExtFunc void RobotTimeStamp(void)
