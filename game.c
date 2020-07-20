@@ -668,7 +668,7 @@ ExtFunc int main(int argc, char **argv)
 			won++;
 		} else {
 			lost++;
-			// Don't wait for net event, to start new game
+			// Wait for net event, to start new game (this is default Netris behaviour)
 			if (!noNetDelayForNewGameFlag) {
 				WaitMyEvent(&event, EM_net);
 			}
