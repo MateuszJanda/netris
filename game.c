@@ -118,10 +118,10 @@ ExtFunc void OneGame(int scr, int scr2)
 	}
 	UpdateUserDisplay(displayStr);
 	ShowDisplayInfo();
-	if (noDropDelayFlag) {
-		SetITimer(MIN_SLIDING_INTERVAL, MIN_SLIDING_INTERVAL);
-	} else {
+	if (delayAfterDropFlag) {
 		SetITimer(speed, speed);
+	} else {
+		SetITimer(MIN_SLIDING_INTERVAL, MIN_SLIDING_INTERVAL);
 	}
 
 	if (robotEnable) {
@@ -141,7 +141,7 @@ ExtFunc void OneGame(int scr, int scr2)
 		RobotCmd(0, "BeginGame\n");
 		RobotTimeStamp();
 	}
-	while (StartNewPiece(scr, ChooseOption(stdOptions), !singlePlayerFlag)) {
+	while (StartNewPiece(scr, ChooseOption(stdOptions), !onlyObserveFlag)) {
 		if (robotEnable && !fairRobot) {
 			++pieceCount;
 			RobotCmd(1, "NewPiece %d\n", pieceCount);
@@ -155,7 +155,7 @@ ExtFunc void OneGame(int scr, int scr2)
 
 			shapeNum = ShapeToNetNum(curShape[scr]);
 			data[0] = hton2(shapeNum);
-			if (!singlePlayerFlag)
+			if (!onlyObserveFlag)
 				SendPacket(NP_newPiece, sizeof(data), data);
 		}
 		for (;;) {
@@ -169,10 +169,10 @@ ExtFunc void OneGame(int scr, int scr2)
 			CheckNetConn();
 			switch (WaitMyEvent(&event, EM_any)) {
 				case E_alarm:
-					if (singlePlayerFlag)
+					if (onlyObserveFlag)
 						break;
 					// Dirty trick. This one-shot timer, often (but not always) helps fix problem with not working
-					// fflush() (triggered by RobotCmd), and speedup game when noDropDelayFlag is enabled.
+					// fflush() (triggered by RobotCmd), and speedup game when delayAfterDropFlag is enabled.
 					// Maybe kernel thread differently multiple write() operation when they are scattered over time
 					if (oneShotTimerActive) {
 						oneShotTimerActive = 0;
@@ -196,7 +196,7 @@ ExtFunc void OneGame(int scr, int scr2)
 					if (!p)
 						break;
 				keyEvent:
-					if (singlePlayerFlag)
+					if (onlyObserveFlag)
 						break;
 					if (paused && (key != KT_pause) && (key != KT_redraw))
 						break;
@@ -241,10 +241,10 @@ ExtFunc void OneGame(int scr, int scr2)
 								if (spied)
 									SendPacket(NP_drop, 0, NULL);
 
-								if (noDropDelayFlag) {
-									SetITimer(MIN_SLIDING_INTERVAL, MIN_SLIDING_INTERVAL);
-								} else {
+								if (delayAfterDropFlag) {
 									SetITimer(speed, speed);
+								} else {
+									SetITimer(MIN_SLIDING_INTERVAL, MIN_SLIDING_INTERVAL);
 								}
 							}
 							oneShotTimerActive = 0;
@@ -309,7 +309,7 @@ ExtFunc void OneGame(int scr, int scr2)
 					switch(event.u.net.type) {
 						case NP_giveJunk:
 						{
-							if (singlePlayerFlag)
+							if (onlyObserveFlag)
 								break;
 
 							netint2 data[2];
@@ -445,10 +445,10 @@ ExtFunc int main(int argc, char **argv)
 	traceToFileFlag = 0;
 	traceFile = NULL;
 	traceTerminalFd = NULL;
-	singlePlayerFlag = 0;
+	onlyObserveFlag = 0;
 	displayStr = NULL;
-	noDropDelayFlag = 0;
-	noNetDelayForNewGameFlag = 0;
+	delayAfterDropFlag = 1;
+	netEventForNewGameFlag = 1;
 
 	standoutEnable = colorEnable = 1;
 	stepDownInterval = DEFAULT_INTERVAL;
@@ -463,16 +463,16 @@ ExtFunc int main(int argc, char **argv)
 				traceTerminalFd = optarg;
 				break;
 			case 'u':
-				singlePlayerFlag = 1;
+				onlyObserveFlag = 1;
 				break;
 			case 'd':
 				displayStr = optarg;
 				break;
 			case 'n':
-				noDropDelayFlag = 1;
+				delayAfterDropFlag = 0;
 				break;
 			case 'm':
-				noNetDelayForNewGameFlag = 1;
+				netEventForNewGameFlag = 0;
 				break;
 
 			// Original options:
@@ -535,7 +535,7 @@ ExtFunc int main(int argc, char **argv)
 		fatal("You can't use the -F option without the -r option");
 	if (traceToFileFlag && traceTerminalFd)
 		fatal("Only one option can selected -t or -f");
-	if (singlePlayerFlag && !waitConn)
+	if (onlyObserveFlag && !waitConn)
 		fatal("-u (single mode) make sense only when you want track network packages (use -w also)");
 	InitTraceLog();
 	InitUtil();
@@ -548,7 +548,7 @@ ExtFunc int main(int argc, char **argv)
 			SRandom(time(0));
 		if (initConn || waitConn) {
 
-			if (singlePlayerFlag) {
+			if (onlyObserveFlag) {
 				game = GT_onePlayer;
 				TracePrint("[+] Game: single player\n");
 			}
@@ -669,27 +669,33 @@ ExtFunc int main(int argc, char **argv)
 		} else {
 			lost++;
 			// Wait for net event, to start new game (this is default Netris behaviour)
-			if (!noNetDelayForNewGameFlag) {
+			if (netEventForNewGameFlag) {
 				WaitMyEvent(&event, EM_net);
 			}
 		}
 		CloseNet();
 		if (robotEnable) {
 			CloseRobot();
-		} else if (singlePlayerFlag) {
+
+			CloseTraceLog();
+			InitTraceLog();
+		} else if (onlyObserveFlag) {
 			gameState = STATE_WAIT_KEYPRESS;
 			ShowDisplayInfo();
 			RefreshScreen();
+
+			CloseTraceLog();
+			InitTraceLog();
 		} else {
 			gameState = STATE_WAIT_KEYPRESS;
 			ShowDisplayInfo();
 			RefreshScreen();
+
+			CloseTraceLog();
 			while(getchar() != keyTable[KT_new])
 				;
+			InitTraceLog();
 		}
-
-		CloseTraceLog();
-		InitTraceLog();
 	}
 
 	return 0;

@@ -116,7 +116,7 @@ ExtFunc void Usage(void)
 	  "\nAdditional options for machine learning environment:\n"
 	  "  -f		Enable tracing to file (%%Y%%m%%d%%H%%M%%S.trace)\n"
 	  "  -t		Enable tracing to terminal (e.g. /dev/pts/0)\n"
-	  "  -u		Force single player mode for network connection\n"
+	  "  -u		Force observe mode for network connection\n"
 	  "  -d		Replace default message on display\n"
 	  "  -n		Disable cliff sliding after drop (truly delay is decreased\n"
 	  "		to 10 milliseconds)\n"

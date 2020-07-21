@@ -179,10 +179,10 @@ EXT int protocolVersion;
 EXT int traceToFileFlag;
 EXT FILE *traceFile;
 EXT char* traceTerminalFd;
-EXT int singlePlayerFlag;
+EXT int onlyObserveFlag;
 EXT char* displayStr;
-EXT int noDropDelayFlag;
-EXT int noNetDelayForNewGameFlag;
+EXT int delayAfterDropFlag;
+EXT int netEventForNewGameFlag;
 
 EXT long initSeed;
 EXT long stepDownInterval, speed;
