@@ -131,6 +131,10 @@ ExtFunc void CloseRobot(void)
 		close(fromRobotFd);
 		toRobot = NULL;
 	}
+
+	// Cleanup robot buffer
+	robotBufMsg = 0;
+	robotBufSize = 0;
 }
 
 static MyEventType RobotGenFunc(EventGenRec *gen, MyEvent *event)
