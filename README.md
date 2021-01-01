@@ -1,4 +1,4 @@
-Modified version of [Netris by Mark H. Weaver](https://github.com/naclander/netris) - Tetris like game - used as a machine learning environment. Features:
+Modified version of [Netris by Mark H. Weaver](https://github.com/naclander/netris) - Tetris like game - modified to be used as a machine learning environment. Features:
 - network communication tracking for supervised learning
 - option disabling unnecessary delays for reinforcement learning
 - option disabling cliff sliding
